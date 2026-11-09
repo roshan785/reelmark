@@ -1,5 +1,5 @@
 /*!
- * app.js — Reelmark frontend controller.
+ * app.js — GenMart frontend controller.
  *
  * The hero markup is a static design; this file only ADDS behaviour:
  *   • CTA "Make a Reel" → brief modal → POST /api/reels (signed-in) or contact
@@ -20,8 +20,12 @@
      be required by a test runner or bundler without throwing. */
   if (typeof document === 'undefined' || typeof window === 'undefined') return;
 
-  var TOKEN_KEY = 'reelmark.token';
-  var USER_KEY = 'reelmark.user';
+  var TOKEN_KEY = 'genmart.token';
+  var USER_KEY = 'genmart.user';
+  /* Pre-rename keys. Read once and migrated forward so nobody is logged out by
+     the brand change; nothing writes them any more. */
+  var LEGACY_TOKEN_KEY = 'reelmark.token';
+  var LEGACY_USER_KEY = 'reelmark.user';
 
   var dialog = null;
   var dash = null;
@@ -47,13 +51,29 @@
 
   /* ---------- session ---------- */
 
+  /* Move a value from the pre-rename key to the current one. Returns the new
+     key's value, so an existing session survives the rebrand exactly once. */
+  function adoptLegacy(legacyKey, key) {
+    try {
+      var legacy = localStorage.getItem(legacyKey);
+      if (!legacy) return null;
+      localStorage.setItem(key, legacy);
+      localStorage.removeItem(legacyKey);
+      return legacy;
+    } catch (_) { return null; }
+  }
+
   function token() {
-    try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (_) { return ''; }
+    try {
+      var value = localStorage.getItem(TOKEN_KEY);
+      if (value) return value;
+      return adoptLegacy(LEGACY_TOKEN_KEY, TOKEN_KEY) || '';
+    } catch (_) { return ''; }
   }
 
   function cachedUser() {
     try {
-      var raw = localStorage.getItem(USER_KEY);
+      var raw = localStorage.getItem(USER_KEY) || adoptLegacy(LEGACY_USER_KEY, USER_KEY);
       return raw ? JSON.parse(raw) : null;
     } catch (_) { return null; }
   }
@@ -843,8 +863,9 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 
-  /* Used by tools/verify-ui.js to drive the page without a human. */
-  window.__reelmark = {
+  /* Used by tools/verify-ui.js and tests/ui.test.js to drive the page without a
+     human. Exposed under the current brand name only. */
+  window.__genmart = {
     open: open,
     close: close,
     dashboard: openDashboard,

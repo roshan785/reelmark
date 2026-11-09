@@ -1,6 +1,6 @@
 'use strict';
 /*
- * app.js — all HTTP routes and business logic for Reelmark.
+ * app.js — all HTTP routes and business logic for GenMart.
  *
  * Layering:
  *   server.js  → transport (listen, static files, error boundary)
@@ -141,7 +141,7 @@ function createApp(options = {}) {
     const data = store.load();
     sendJson(res, 200, {
       ok: true,
-      site: 'Reelmark',
+      site: 'GenMart',
       tagline: 'Captivate Crowds with Snackable Reels',
       formats: V.REEL_FORMATS,
       goals: V.REEL_GOALS,

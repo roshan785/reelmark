@@ -23,7 +23,7 @@ const TEST_ADMIN_TOKEN = crypto.randomBytes(18).toString('hex');
 const WRONG_PASSWORD = 'W' + crypto.randomBytes(9).toString('hex');
 
 function tempDir() {
-  return fs.mkdtempSync(path.join(os.tmpdir(), 'reelmark-test-'));
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'genmart-test-'));
 }
 
 async function boot(overrides = {}) {
@@ -72,7 +72,7 @@ test('GET / serves the landing page', async () => {
   try {
     const res = await call(app.base, 'GET', '/');
     assert.strictEqual(res.status, 200);
-    assert.match(res.text, /Reelmark/);
+    assert.match(res.text, /GenMart/);
     assert.match(res.text, /Captivate Crowds/);
     assert.strictEqual(res.headers.get('x-content-type-options'), 'nosniff');
   } finally {
@@ -246,7 +246,7 @@ test('signed-in user can create and list reel briefs', async () => {
     const authHeader = { Authorization: 'Bearer ' + token };
 
     const created = await call(app.base, 'POST', '/api/reels', {
-      brand: 'Reelmark',
+      brand: 'GenMart',
       product: 'Snackable reels',
       audience: 'indie founders',
       format: 'vertical-9-16',
@@ -262,7 +262,7 @@ test('signed-in user can create and list reel briefs', async () => {
     const list = await call(app.base, 'GET', '/api/reels', undefined, authHeader);
     assert.strictEqual(list.status, 200);
     assert.strictEqual(list.body.count, 1);
-    assert.strictEqual(list.body.reels[0].brand, 'Reelmark');
+    assert.strictEqual(list.body.reels[0].brand, 'GenMart');
   } finally {
     await app.stop();
   }
@@ -489,7 +489,7 @@ test('data survives a server restart', async () => {
 
 test('corrupt data file is quarantined and the store starts clean', () => {
   const dir = tempDir();
-  const file = path.join(dir, 'reelmark.json');
+  const file = path.join(dir, 'genmart.json');
   fs.writeFileSync(file, '{ broken json');
 
   const logger = silentLogger();
@@ -509,7 +509,7 @@ test('corrupt data file is quarantined and the store starts clean', () => {
 
 test('store writes are atomic and leave no .tmp behind', async () => {
   const dir = tempDir();
-  const file = path.join(dir, 'reelmark.json');
+  const file = path.join(dir, 'genmart.json');
   const store = new JsonStore(file, { empty: () => ({ items: [] }) });
   store.load();
 

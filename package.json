@@ -1,8 +1,8 @@
 {
-  "name": "reelmark",
+  "name": "genmart",
   "version": "1.0.0",
   "private": true,
-  "description": "Reelmark landing page + backend (auth, reel briefs, contact, leads)",
+  "description": "GenMart landing page + backend (auth, reel briefs, contact, leads)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

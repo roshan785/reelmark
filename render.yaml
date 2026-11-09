@@ -1,4 +1,4 @@
-# render.yaml — Render Blueprint for Reelmark.
+# render.yaml — Render Blueprint for GenMart.
 #
 # This file means the GitHub repo alone is enough to deploy: Render reads it,
 # provisions the service, and redeploys on every push to the default branch.
@@ -12,7 +12,7 @@
 #   uncomment the disk + DATA_DIR lines. Nothing else needs to change.
 services:
   - type: web
-    name: reelmark
+    name: genmart
     runtime: node
     plan: free
     region: singapore
@@ -36,7 +36,7 @@ services:
         generateValue: true
     # --- enable for permanent data (requires a paid instance type) ---
     # disk:
-    #   name: reelmark-data
+    #   name: genmart-data
     #   mountPath: /var/data
     #   sizeGB: 1
     #   envVar: DATA_DIR

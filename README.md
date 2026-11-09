@@ -1,5 +1,10 @@
-Reelmark — landing page + backend
-=================================
+GenMart — landing page + backend
+================================
+
+Formerly named Reelmark. The rename is cosmetic plus a one-time migration:
+existing accounts/leads in `data/reelmark.json` are moved to
+`data/genmart.json` on first boot, and the old `reelmark.*` localStorage keys are
+carried over to `genmart.*` so nobody is logged out.
 
 `public/index.html` is the original design from Downloads, byte-identical except
 for two added `<link>`/`<script>` lines. Everything else around it is new.

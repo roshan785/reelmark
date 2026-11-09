@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# start.sh — run Reelmark locally on a fixed port with a stable data dir.
+# start.sh — run GenMart locally on a fixed port with a stable data dir.
 #
 # Usage:
 #   ./start.sh                 # port 4177

@@ -1,6 +1,6 @@
 'use strict';
 /*
- * server.js — transport layer for Reelmark.
+ * server.js — transport layer for GenMart.
  *
  * Responsibilities (and nothing else):
  *   • serve public/ statically, with ETag + cache-busting-friendly headers
@@ -11,7 +11,7 @@
  * Env:
  *   PORT          listen port (default 4000)
  *   HOST          bind address (default 127.0.0.1 — tunnels connect locally)
- *   DATA_DIR      where reels.json / session.key live (default ./data)
+ *   DATA_DIR      where genmart.json / session.key live (default ./data)
  *   ADMIN_TOKEN   enables GET /api/leads + PATCH /api/leads/:id
  *   TRUST_PROXY   '1' to trust X-Forwarded-For (required behind a tunnel)
  */
@@ -45,10 +45,34 @@ const MIME = {
 
 const EMPTY_STATE = () => ({ users: [], reels: [], contacts: [] });
 
+const STATE_FILE = 'genmart.json';
+const LEGACY_STATE_FILE = 'reelmark.json';
+
+/**
+ * Carry an existing data file forward across the rebrand. Runs once: if the
+ * current file is missing but the pre-rename one is present, it is renamed so
+ * accounts and leads survive. A failure here must never stop the server —
+ * the store simply starts empty instead of crashing on boot.
+ */
+function migrateLegacyState(dir) {
+  const target = path.join(dir, STATE_FILE);
+  const legacy = path.join(dir, LEGACY_STATE_FILE);
+  if (fs.existsSync(target) || !fs.existsSync(legacy)) return false;
+  try {
+    fs.renameSync(legacy, target);
+    console.log('[genmart] migrated ' + LEGACY_STATE_FILE + ' -> ' + STATE_FILE);
+    return true;
+  } catch (err) {
+    console.error('[genmart] could not migrate ' + LEGACY_STATE_FILE + ':', err.message);
+    return false;
+  }
+}
+
 function buildStore(dataDir) {
   const dir = path.resolve(dataDir);
   fs.mkdirSync(dir, { recursive: true });
-  const store = new JsonStore(path.join(dir, 'reelmark.json'), { empty: EMPTY_STATE });
+  migrateLegacyState(dir);
+  const store = new JsonStore(path.join(dir, STATE_FILE), { empty: EMPTY_STATE });
   const state = store.load();
   /* Repair a partially-shaped file instead of crashing on first request. */
   let repaired = false;
@@ -262,15 +286,15 @@ if (require.main === module) {
   const { server, store } = createServer();
 
   server.listen(port, host, () => {
-    console.log('[reelmark] listening on http://' + host + ':' + port);
-    console.log('[reelmark] admin API ' + (process.env.ADMIN_TOKEN ? 'ENABLED' : 'disabled (set ADMIN_TOKEN)'));
+    console.log('[genmart] listening on http://' + host + ':' + port);
+    console.log('[genmart] admin API ' + (process.env.ADMIN_TOKEN ? 'ENABLED' : 'disabled (set ADMIN_TOKEN)'));
   });
 
   server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-      console.error('[reelmark] port ' + port + ' is already in use — set PORT to another value');
+      console.error('[genmart] port ' + port + ' is already in use — set PORT to another value');
     } else {
-      console.error('[reelmark] server error:', err.message);
+      console.error('[genmart] server error:', err.message);
     }
     process.exit(1);
   });
@@ -279,7 +303,7 @@ if (require.main === module) {
   const shutdown = (signal) => {
     if (closing) return;
     closing = true;
-    console.log('[reelmark] ' + signal + ' received — draining store and closing');
+    console.log('[genmart] ' + signal + ' received — draining store and closing');
     store
       .idle()
       .catch(() => {})

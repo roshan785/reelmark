@@ -46,7 +46,7 @@ async function withBrowser(fn) {
 }
 
 async function startServer() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'reelmark-ui-data-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'genmart-ui-data-'));
   const { server, store } = createServer({
     dataDir: dir,
     adminToken: randomToken(),
@@ -86,13 +86,13 @@ test('UI: hero renders and the Make a Reel CTA opens the brief panel', { skip: !
     await B.goto(session, app.url);
 
     const title = await B.evaluate(session, 'document.title');
-    assert.match(title, /Reelmark/);
+    assert.match(title, /GenMart/);
 
     await B.evaluate(session, "document.querySelector('.cta').click()");
     const open = await waitFor(session, "!!document.querySelector('#rm-modal.open')");
     assert.ok(open, 'modal should be open');
 
-    const mode = await B.evaluate(session, 'window.__reelmark.mode()');
+    const mode = await B.evaluate(session, 'window.__genmart.mode()');
     assert.strictEqual(mode, 'brief');
 
     const fields = await B.evaluate(
@@ -187,7 +187,7 @@ test('UI: sign up creates a real account and the header switches to the user', {
 
     await waitFor(session, "!!document.querySelector('#rm-modal .rm-success')");
 
-    const token = await B.evaluate(session, "localStorage.getItem('reelmark.token') || ''");
+    const token = await B.evaluate(session, "localStorage.getItem('genmart.token') || ''");
     assert.ok(token.length > 20, 'a session token should be stored');
 
     const pills = await B.evaluate(
@@ -265,7 +265,7 @@ test('UI: contact form posts once to /api/contact and never to /api/reels', { sk
     await B.evaluate(session, "document.querySelector('a[href=\"#contact\"]').click()");
     await waitFor(session, "!!document.querySelector('#rm-modal.open')");
 
-    const mode = await B.evaluate(session, 'window.__reelmark.mode()');
+    const mode = await B.evaluate(session, 'window.__genmart.mode()');
     assert.strictEqual(mode, 'contact', 'contact link should open the contact panel');
 
     await B.evaluate(session, `
@@ -306,11 +306,11 @@ test('UI: every nav link opens a panel instead of a dead anchor', { skip: !CHROM
 
     for (const href of hrefs) {
       const expected = href.slice(1) === 'contact' ? 'contact' : href.slice(1);
-      await B.evaluate(session, 'window.__reelmark.close()');
+      await B.evaluate(session, 'window.__genmart.close()');
       await B.sleep(80);
       await B.evaluate(session, `document.querySelector('.nav a[href="${href}"]').click()`);
       await waitFor(session, "!!document.querySelector('#rm-modal.open')");
-      const mode = await B.evaluate(session, 'window.__reelmark.mode()');
+      const mode = await B.evaluate(session, 'window.__genmart.mode()');
       assert.strictEqual(mode, expected, href + ' should open the ' + expected + ' panel');
       const body = await B.evaluate(session, "document.querySelector('#rm-body').textContent.trim().length");
       assert.ok(body > 40, href + ' panel should have content');
@@ -363,7 +363,7 @@ test('UI: dashboard lists only the signed-in user\'s briefs', { skip: !CHROME &&
     `);
     await waitFor(session, "!!document.querySelector('#rm-modal .rm-success')");
 
-    await B.evaluate(session, 'window.__reelmark.dashboard()');
+    await B.evaluate(session, 'window.__genmart.dashboard()');
     await waitFor(session, "document.querySelectorAll('#rm-dash .rm-brief').length > 0");
 
     const brands = await B.evaluate(
@@ -401,7 +401,7 @@ test('UI: submitting a brief while signed out routes to login and keeps the inte
       }())
     `);
 
-    await waitFor(session, "window.__reelmark.mode() === 'login'");
+    await waitFor(session, "window.__genmart.mode() === 'login'");
     const error = await B.evaluate(session, "document.querySelector('#rm-error').textContent");
     assert.match(error, /log in|account/i);
 

@@ -89,7 +89,7 @@ async function launchChrome() {
   if (!binary) return null;
   if (!webSocketCtor()) return null;
 
-  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'reelmark-cdp-'));
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'genmart-cdp-'));
   const child = spawn(binary, [
     '--headless=new',
     '--remote-debugging-port=0',
