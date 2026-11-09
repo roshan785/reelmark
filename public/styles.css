@@ -1,0 +1,177 @@
+/*!
+ * styles.css — additions for the backend-driven UI.
+ * Loaded AFTER the inline hero styles so it only layers on top; the original
+ * hero design (stage, carousel, doodles) is untouched.
+ */
+
+#rm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+#rm-modal.open { display: flex; }
+
+#rm-modal .rm-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 20, 16, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+#rm-modal .rm-panel {
+  position: relative;
+  width: min(480px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: #f5f8ef;
+  color: #101410;
+  border-radius: 20px;
+  padding: 26px 24px 22px;
+  box-shadow: 0 24px 60px rgba(8, 72, 45, 0.22);
+}
+
+#rm-modal .rm-x {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  color: #5e5e61;
+}
+
+#rm-modal .rm-x:hover { background: rgba(8, 72, 45, 0.08); }
+
+#rm-modal .rm-title {
+  margin: 0 0 6px;
+  font-family: "Inter Tight", Inter, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #08482d;
+}
+
+#rm-modal .rm-sub {
+  margin: 0 0 18px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #5e5e61;
+}
+
+#rm-modal .rm-field { margin-bottom: 12px; }
+
+#rm-modal .rm-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+#rm-modal label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #34483b;
+}
+
+#rm-modal input,
+#rm-modal select,
+#rm-modal textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  color: #101410;
+  background: #fff;
+  border: 1px solid rgba(8, 72, 45, 0.18);
+  border-radius: 10px;
+  outline: none;
+}
+
+#rm-modal input:focus,
+#rm-modal select:focus,
+#rm-modal textarea:focus {
+  border-color: #08482d;
+  box-shadow: 0 0 0 3px rgba(8, 72, 45, 0.12);
+}
+
+#rm-modal textarea { resize: vertical; }
+
+#rm-modal .rm-submit {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #08482d;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#rm-modal .rm-submit:hover:not(:disabled) { background: #063d26; transform: translateY(-1px); }
+#rm-modal .rm-submit:disabled { opacity: 0.65; cursor: progress; }
+
+#rm-modal .rm-error {
+  margin: 4px 0 8px;
+  padding: 9px 11px;
+  border-radius: 9px;
+  background: #fdeceb;
+  color: #93231c;
+  font-size: 13px;
+}
+
+#rm-modal .rm-ok {
+  margin: 6px 0;
+  padding: 14px;
+  border-radius: 12px;
+  background: #dae7c7;
+  color: #08482d;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+#rm-modal .rm-hint {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  color: #5e5e61;
+  text-align: center;
+}
+
+#rm-modal .rm-hint a {
+  color: #08482d;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+#rm-modal .rm-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 12px;
+  font-size: 12.5px;
+  color: #34483b;
+  font-weight: 500;
+}
+
+#rm-modal .rm-check input { width: auto; }
+
+body.rm-locked { overflow: hidden; }
+
+@media (max-width: 480px) {
+  #rm-modal .rm-row { grid-template-columns: 1fr; }
+  #rm-modal .rm-panel { border-radius: 16px; padding: 22px 18px 18px; }
+}

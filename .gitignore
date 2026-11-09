@@ -1,0 +1,12 @@
+node_modules/
+*.log
+.DS_Store
+
+# Runtime state — never committed. On a host with a persistent disk (see
+# render.yaml) this directory lives on the mounted volume instead.
+data/
+.admin-token
+
+# editor/backup artefacts
+*.bak_*
+*.bak

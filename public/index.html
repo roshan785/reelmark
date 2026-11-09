@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#F5F8EF" />
+<title>Reelmark — Captivate Crowds with Snackable Reels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+<style>
+  :root {
+    --u: min(0.069444vw, 0.092593vh);
+    --paper: #F5F8EF;
+    --forest: #08482D;
+    --mint: #DAE7C7;
+    --ink: #101410;
+    --sub: #5E5E61;
+    --stage-w: calc(1440 * var(--u));
+    --stage-h: calc(1080 * var(--u));
+  }
+  * { box-sizing: border-box; }
+  html, body { width:100%; height:100%; margin:0; }
+  body {
+    background:var(--paper); color:var(--ink); overflow:hidden;
+    display:grid; place-items:center;
+    font-family:Inter, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  button, a { font:inherit; }
+  button { cursor:pointer; }
+  .stage {
+    position:relative; width:var(--stage-w); height:var(--stage-h);
+    overflow:hidden; flex:none; background:var(--paper); isolation:isolate;
+  }
+  .topbar {
+    position:absolute; z-index:20; left:calc(37 * var(--u)); top:calc(29 * var(--u));
+    width:calc(1366 * var(--u)); height:calc(42 * var(--u));
+    display:flex; align-items:center;
+  }
+  .brand { display:flex; align-items:center; gap:calc(9 * var(--u)); color:var(--forest); text-decoration:none; }
+  .leaf { width:calc(27 * var(--u)); height:calc(27 * var(--u)); display:block; }
+  .brand-name { font-size:calc(21 * var(--u)); line-height:1; font-weight:700; letter-spacing:-.045em; }
+  .nav { position:absolute; left:calc(468 * var(--u)); display:flex; align-items:center; gap:calc(31 * var(--u)); white-space:nowrap; }
+  .nav a { color:#34483b; text-decoration:none; font-size:calc(16.4 * var(--u)); font-weight:500; transition:color .2s ease; }
+  .nav a:hover { color:var(--forest); }
+  .account-actions { margin-left:auto; display:flex; gap:calc(9 * var(--u)); align-items:center; }
+  .pill { height:calc(40 * var(--u)); border-radius:999px; padding:0 calc(18 * var(--u)); display:inline-flex; align-items:center; justify-content:center; text-decoration:none; font-size:calc(15 * var(--u)); font-weight:600; border:1px solid rgba(8,72,45,.1); }
+  .login { background:#fff; color:var(--forest); min-width:calc(92 * var(--u)); }
+  .signup { background:var(--forest); color:#fff; min-width:calc(97 * var(--u)); }
+
+  .badge {
+    position:absolute; z-index:10; left:50%; top:calc(115 * var(--u)); transform:translateX(-50%);
+    min-width:calc(292 * var(--u)); height:calc(37 * var(--u)); padding:0 calc(17 * var(--u));
+    border-radius:999px; background:var(--mint); color:var(--forest);
+    display:flex; align-items:center; justify-content:center; gap:calc(8 * var(--u));
+    white-space:nowrap; font-size:calc(16.6 * var(--u)); font-weight:500;
+  }
+  .badge svg { width:calc(16 * var(--u)); height:calc(16 * var(--u)); }
+  .headline {
+    position:absolute; z-index:9; top:calc(174 * var(--u)); left:0; width:100%; margin:0;
+    text-align:center; font-family:"Inter Tight", Inter, sans-serif; font-size:calc(88 * var(--u));
+    line-height:calc(92 * var(--u)); font-weight:700; letter-spacing:-.035em;
+  }
+  .headline span { display:block; white-space:nowrap; }
+  .headline span + span { letter-spacing:-.022em; }
+  .subline {
+    position:absolute; z-index:9; top:calc(394 * var(--u)); left:50%; width:calc(690 * var(--u));
+    transform:translateX(-50%); margin:0; text-align:center; color:var(--sub);
+    font-size:calc(20.8 * var(--u)); line-height:calc(32 * var(--u)); font-weight:400;
+  }
+
+  .doodle { position:absolute; z-index:12; overflow:visible; pointer-events:none; }
+  .doodle path { fill:none; stroke:var(--forest); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+  .doodle .draw { stroke-dasharray:var(--length, 400); stroke-dashoffset:var(--length, 400); }
+  .slashes { left:calc(251 * var(--u)); top:calc(361 * var(--u)); width:calc(41 * var(--u)); height:calc(38 * var(--u)); }
+  .be-seen {
+    position:absolute; z-index:13; left:calc(1206 * var(--u)); top:calc(302 * var(--u));
+    color:var(--forest); font-family:Caveat,cursive; font-size:calc(38 * var(--u));
+    line-height:.82; font-weight:600; transform:rotate(16deg); pointer-events:none;
+  }
+  .be-seen span { display:block; }
+  .be-arrow { left:calc(1111 * var(--u)); top:calc(365 * var(--u)); width:calc(230 * var(--u)); height:calc(185 * var(--u)); }
+  .zero-cost {
+    position:absolute; z-index:14; left:calc(518 * var(--u)); top:calc(929 * var(--u));
+    font:600 calc(30 * var(--u))/.9 Caveat,cursive; color:var(--forest); transform:rotate(24deg); pointer-events:none;
+  }
+  .zero-arrow { left:calc(569 * var(--u)); top:calc(922 * var(--u)); width:calc(77 * var(--u)); height:calc(52 * var(--u)); }
+
+  .carousel {
+    position:absolute; z-index:5; inset:0; overflow:hidden; touch-action:pan-y;
+    cursor:grab; user-select:none; -webkit-user-select:none;
+  }
+  .carousel.dragging { cursor:grabbing; }
+  .card {
+    position:absolute; overflow:hidden; background:#dce8d0; contain:layout paint style;
+    transform:translateZ(0); will-change:left,top,width,height,clip-path;
+    border-radius:0; pointer-events:none;
+  }
+  .card svg { display:none; }
+  .card-media { position:absolute; overflow:hidden; inset:0; }
+  .media-sheet { position:absolute; max-width:none; max-height:none; object-fit:fill; display:block; }
+  .poster-sheet { z-index:1; background-repeat:no-repeat; background-size:500% 200%; }
+  .video-sheet { z-index:2; opacity:0; transition:opacity .35s ease; }
+  .card.video-ready .video-sheet { opacity:1; }
+  .play {
+    position:absolute; z-index:4; left:calc(12 * var(--u)); bottom:calc(12 * var(--u));
+    width:calc(34 * var(--u)); height:calc(34 * var(--u)); border-radius:50%;
+    background:rgba(248,251,244,.72); border:1px solid rgba(255,255,255,.55);
+    backdrop-filter:blur(9px); display:grid; place-items:center;
+  }
+  .play svg { display:block; width:42%; height:42%; fill:var(--forest); margin-left:2px; }
+
+  .cta-wrap { position:absolute; z-index:18; left:calc(626 * var(--u)); top:calc(901 * var(--u)); width:calc(190 * var(--u)); height:calc(74 * var(--u)); display:grid; place-items:center; }
+  .cta-ring { position:absolute; inset:0; border:calc(1.5 * var(--u)) dashed rgba(8,72,45,.55); border-radius:999px; }
+  .cta {
+    position:relative; border:0; border-radius:999px; height:calc(58 * var(--u)); width:calc(172 * var(--u));
+    background:var(--forest); color:#fff; font-size:calc(17 * var(--u)); font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:calc(9 * var(--u));
+    box-shadow:0 calc(7 * var(--u)) calc(18 * var(--u)) rgba(8,72,45,.12);
+    transition:transform .2s ease, background .2s ease;
+  }
+  .cta:hover { transform:translateY(-2px); background:#063d26; }
+  .cta svg { width:calc(17 * var(--u)); height:calc(17 * var(--u)); }
+
+  .mobile-only { display:none; }
+  @media (max-width:820px) {
+    :root { --u: min(0.15625vw, 0.135vh); }
+    body { display:block; overflow:hidden; }
+    .stage { width:100vw; height:100svh; min-height:620px; overflow:hidden; }
+    .topbar { left:20px; top:calc(env(safe-area-inset-top) + 17px); width:calc(100% - 40px); height:42px; }
+    .leaf { width:25px; height:25px; }
+    .brand-name { font-size:19px; }
+    .nav, .login { display:none; }
+    .account-actions { margin-left:auto; }
+    .signup { min-width:88px; height:37px; font-size:13px; padding:0 15px; }
+    .badge { top:105px; height:31px; min-width:0; padding:0 13px; font-size:12px; gap:6px; }
+    .badge svg { width:13px; height:13px; }
+    .headline { top:158px; padding:0 13px; font-size:clamp(38px, 7.3vw, 56px); line-height:1.02; letter-spacing:-.04em; }
+    .headline span { white-space:normal; }
+    .headline span + span { letter-spacing:-.03em; }
+    .subline { top:282px; width:min(91vw, 540px); font-size:14px; line-height:21px; }
+    .subline br { display:none; }
+    .slashes, .be-seen, .be-arrow { display:none; }
+    .carousel { top:340px; height:250px; }
+    .card .play { width:25px; height:25px; left:8px; bottom:8px; }
+    .cta-wrap { left:50%; top:auto; bottom:calc(env(safe-area-inset-bottom) + 50px); transform:translateX(-50%); width:190px; height:68px; }
+    .cta-ring { inset:0; }
+    .cta { width:172px; height:54px; font-size:15px; }
+    .zero-cost { left:calc(50% - 144px); top:auto; bottom:calc(env(safe-area-inset-bottom) + 73px); font-size:24px; }
+    .zero-arrow { left:calc(50% - 100px); top:auto; bottom:calc(env(safe-area-inset-bottom) + 74px); width:50px; height:30px; }
+  }
+  @media (max-width:390px) {
+    .headline { font-size:38px; }
+    .subline { top:278px; }
+    .carousel { top:330px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior:auto !important; animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage" id="stage" aria-label="Reelmark landing page hero">
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#" aria-label="Reelmark home">
+      <svg class="leaf" viewBox="0 0 32 32" aria-hidden="true"><path d="M26.8 4.5C16 4.7 7.3 8.2 5.2 16.1c-1.2 4.5 1.5 8.8 5.8 9.2 7.5.8 13.8-8.1 15.8-20.8Z" fill="#08482D"/><path d="M7.2 27.3c4.1-7.2 8.6-11.1 15.8-16" fill="none" stroke="#F5F8EF" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span class="brand-name">Reelmark</span>
+    </a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#brands">Brands</a><a href="#creators">Creators</a><a href="#pricing">Pricing</a><a href="#use-cases">Use Cases</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="account-actions"><a class="pill login" href="#login">Log in</a><a class="pill signup" href="#signup">Sign up</a></div>
+  </header>
+
+  <div class="badge" id="badge"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2.1 16 4.4v4.5c0 4-2.5 6.9-6 9-3.5-2.1-6-5-6-9V4.4l6-2.3Z" stroke="currentColor" stroke-width="1.55"/><path d="m7.3 9.8 1.8 1.8 3.7-4" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/></svg>Trusted by 120,000+ indie makers</div>
+  <h1 class="headline" id="headline"><span>Captivate Crowds</span><span>with Snackable Reels</span></h1>
+  <p class="subline" id="subline">Grow your brand with short, snappy product clips by<br>our handpicked video makers. Our crew is ready to<br>lift your next launch higher.</p>
+
+  <svg class="doodle slashes" viewBox="0 0 41 38" aria-hidden="true"><path class="draw" d="M9 5 2 32 M31 3 23 31"/></svg>
+  <div class="be-seen" id="beSeen"><span>Be seen</span><span>with clips</span></div>
+  <svg class="doodle be-arrow" viewBox="0 0 230 185" aria-hidden="true"><path class="draw" d="M5 7 C38 22 72 28 90 58 C111 91 90 127 117 145 C137 159 164 145 179 126"/><path class="draw" d="m165 126 14 1-2 14"/></svg>
+  <div class="zero-cost" id="zeroCost">Zero cost</div>
+  <svg class="doodle zero-arrow" viewBox="0 0 77 52" aria-hidden="true"><path class="draw" d="M4 37 C21 17 41 9 65 11 M55 4 66 11 57 20"/></svg>
+
+  <section class="carousel" id="carousel" aria-label="Featured creator videos. Drag to browse.">
+    <div class="card" data-tile="0"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="1"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="2"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="3"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="4"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="5"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="6"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="7"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="8"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+    <div class="card" data-tile="9"><div class="card-media"><div class="poster-sheet media-sheet"></div><video class="video-sheet media-sheet" muted playsinline loop preload="auto"></video></div><span class="play"><svg viewBox="0 0 12 14"><path d="M2 1.2c0-.8.9-1.3 1.6-.8l7.2 4.7a1.1 1.1 0 0 1 0 1.8l-7.2 4.7c-.7.5-1.6 0-1.6-.8V1.2Z"/></svg></span></div>
+  </section>
+
+  <div class="cta-wrap" id="ctaWrap"><div class="cta-ring"></div><a class="cta" href="#make-a-reel">Make a Reel <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+</main>
+<script>
+(() => {
+  const posterURL = 'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/b7ebb74a-8c8a-4f7e-8f80-55e2d74ecd05.webp';
+  const videoURL = 'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/04fd3d5f-99d7-476e-98a4-46c08518ffb3.mp4';
+  const stage = document.getElementById('stage');
+  const carousel = document.getElementById('carousel');
+  const cards = [...carousel.querySelectorAll('.card')];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile = window.matchMedia('(max-width: 820px)');
+  const tileRatio = 384 / 540;
+  let u = 1, lastFrame = 0, lastClockTime = null, offset = 0, momentum = 0;
+  let dragging = false, pointerId = null, dragStartX = 0, dragStartOffset = 0;
+  let previousX = 0, previousTime = 0, lastVelocity = 0;
+  let rafId = 0;
+  let animationClock = null;
+  let startTime = performance.now();
+
+  const readScale = () => {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue('--u').trim();
+    const value = parseFloat(raw);
+    return Number.isFinite(value) && value > 0 ? value : 1;
+  };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const wrap = (value, span) => ((value + span / 2) % span + span) % span - span / 2;
+
+  function createVideoLayers() {
+    cards.forEach(card => {
+      const tile = Number(card.dataset.tile);
+      const row = Math.floor(tile / 5), col = tile % 5;
+      const poster = card.querySelector('.poster-sheet');
+      const video = card.querySelector('video');
+      poster.style.backgroundImage = `url("${posterURL}")`;
+      poster.style.backgroundPosition = `${col * 25}% ${row * 100}%`;
+      if (!reducedMotion.matches) {
+        video.src = videoURL;
+        video.poster = posterURL;
+        video.addEventListener('loadeddata', () => {
+          if (video.readyState >= 2) card.classList.add('video-ready');
+        }, { once:true });
+        video.addEventListener('error', () => card.classList.remove('video-ready'));
+      }
+      card.dataset.col = col;
+      card.dataset.row = row;
+    });
+    if (reducedMotion.matches) return;
+    const videos = cards.map(c => c.querySelector('video'));
+    let readyCount = 0;
+    videos.forEach(video => {
+      video.addEventListener('loadedmetadata', () => {
+        readyCount++;
+        if (readyCount === videos.length) {
+          const t = ((performance.now() - startTime) / 1000) % 5;
+          videos.forEach(v => { try { v.currentTime = t; const p = v.play(); if (p) p.catch(() => {}); } catch (_) {} });
+        }
+      }, { once:true });
+    });
+    // Browsers commonly share the cached media resource for identical URLs.
+    // Periodic correction keeps all ten crops on a common playback timestamp.
+    setInterval(() => {
+      const active = videos.find(v => v.readyState >= 2);
+      if (!active || !Number.isFinite(active.currentTime)) return;
+      const t = active.currentTime;
+      videos.forEach(v => {
+        if (v.readyState >= 2 && Math.abs(v.currentTime - t) > .12) {
+          try { v.currentTime = t; } catch (_) {}
+        }
+      });
+    }, 1200);
+  }
+
+  function roundedQuadPath(w, lt, rt, rb, lb, h, r) {
+    const rr = Math.max(1, Math.min(r, w/2, (lb-lt)/2, (rb-rt)/2, h/2));
+    const fmt = n => Number(n.toFixed(2));
+    return `path("M ${fmt(rr)} ${fmt(lt)} L ${fmt(w-rr)} ${fmt(rt)} Q ${fmt(w)} ${fmt(rt)} ${fmt(w)} ${fmt(rt+rr)} L ${fmt(w)} ${fmt(rb-rr)} Q ${fmt(w)} ${fmt(rb)} ${fmt(w-rr)} ${fmt(rb)} L ${fmt(rr)} ${fmt(lb)} Q 0 ${fmt(lb)} 0 ${fmt(lb-rr)} L 0 ${fmt(lt+rr)} Q 0 ${fmt(lt)} ${fmt(rr)} ${fmt(lt)} Z")`;
+  }
+
+  function placeCard(card, xU, index) {
+    const d = Math.abs(xU - 720) / 706;
+    const widthU = 170 + 48 * d * d;
+    const leftX = xU - widthU / 2;
+    const rightX = xU + widthU / 2;
+    const qL = Math.abs(leftX - 720) / 706;
+    const qR = Math.abs(rightX - 720) / 706;
+    const hL = 280 + 92 * Math.pow(qL, 2.6);
+    const hR = 280 + 92 * Math.pow(qR, 2.6);
+    const cy = 687 - 12 * d * d;
+    const topL = cy - hL/2, topR = cy - hR/2;
+    const botL = cy + hL/2, botR = cy + hR/2;
+    const top = Math.min(topL, topR), bottom = Math.max(botL, botR);
+    const heightU = bottom-top;
+    const w = widthU*u, h = heightU*u;
+    const ltop = (topL-top)*u, rtop = (topR-top)*u;
+    const rbot = (botR-top)*u, lbot = (botL-top)*u;
+    card.style.left = `${(xU-widthU/2)*u}px`;
+    card.style.top = `${top*u}px`;
+    card.style.width = `${w}px`;
+    card.style.height = `${h}px`;
+    card.style.clipPath = roundedQuadPath(w, ltop, rtop, rbot, lbot, h, 15*u);
+    card.style.webkitClipPath = card.style.clipPath;
+
+    const tileW = Math.max(h * tileRatio, w);
+    const tileH = Math.max(h, w / tileRatio);
+    const sheetW = tileW * 5, sheetH = tileH * 2;
+    const col = Number(card.dataset.col), row = Number(card.dataset.row);
+    const poster = card.querySelector('.poster-sheet');
+    const video = card.querySelector('video');
+    [poster, video].forEach(el => {
+      el.style.width = `${sheetW}px`;
+      el.style.height = `${sheetH}px`;
+      el.style.left = `${-col*tileW}px`;
+      el.style.top = `${-row*tileH}px`;
+    });
+    card.style.zIndex = String(Math.round(1000 - Math.abs(xU-720)));
+  }
+
+  function render(now) {
+    u = readScale();
+    const span = cards.length * 196;
+    const clockNow = animationClock ? Number(animationClock.currentTime || 0) : now;
+    const elapsed = lastClockTime === null ? 0 : clamp((clockNow-lastClockTime)/1000, 0, .05);
+    lastClockTime = clockNow;
+    lastFrame = now;
+    if (!reducedMotion.matches && !dragging) {
+      offset += 50 * elapsed;
+      if (Math.abs(momentum) > .05) {
+        offset += momentum * elapsed;
+        momentum *= Math.pow(.95, elapsed);
+      } else momentum = 0;
+    }
+    const isMobile = mobile.matches;
+    const basePitch = isMobile ? 118 : 196;
+    const localSpan = cards.length * basePitch;
+    cards.forEach((card, i) => {
+      const base = (i - (cards.length-1)/2) * basePitch;
+      const t = wrap(base-offset, localSpan);
+      // Compress the 640-unit mobile composition into a 250px-tall carousel band.
+      if (isMobile) {
+        const scale = Math.min(window.innerWidth/640, 250/390);
+        const x = 320 + t*(1 + .075*Math.pow(t/310,2));
+        const d = Math.min(1,Math.abs(t)/310);
+        const width = 90 + 26*d*d;
+        const left = x-width/2;
+        const cx = 687 - 12*d*d;
+        const hl = 148 + 48*Math.pow(Math.abs(left-320)/310,2.6);
+        const hr = 148 + 48*Math.pow(Math.abs(left+width-320)/310,2.6);
+        const top = Math.min(cx-hl/2,cx-hr/2);
+        const bottom = Math.max(cx+hl/2,cx+hr/2);
+        const h=bottom-top;
+        const wpx=width*scale, hpx=h*scale;
+        const lt=(cx-hl/2-top)*scale, rt=(cx-hr/2-top)*scale;
+        const rb=(cx+hr/2-top)*scale, lb=(cx+hl/2-top)*scale;
+        card.style.left = `${(left*scale + (window.innerWidth-640*scale)/2)}px`;
+        card.style.top = `${(top-610)*scale + 70}px`;
+        card.style.width = `${wpx}px`; card.style.height = `${hpx}px`;
+        card.style.clipPath = roundedQuadPath(wpx,lt,rt,rb,lb,hpx,9*scale);
+        card.style.webkitClipPath = card.style.clipPath;
+        const tw=Math.max(hpx*tileRatio,wpx), th=Math.max(hpx,wpx/tileRatio);
+        const col=Number(card.dataset.col), row=Number(card.dataset.row);
+        [card.querySelector('.poster-sheet'),card.querySelector('video')].forEach(el=>{
+          el.style.width=`${tw*5}px`; el.style.height=`${th*2}px`;
+          el.style.left=`${-col*tw}px`; el.style.top=`${-row*th}px`;
+        });
+      } else {
+        const x = 720 + t * (1 + 0.083 * Math.pow(t/706,2));
+        placeCard(card, x, i);
+      }
+    });
+    rafId = requestAnimationFrame(render);
+  }
+
+  function animateIn() {
+    if (reducedMotion.matches || !Element.prototype.animate) return;
+    const ease = 'cubic-bezier(.2,.75,.25,1)';
+    document.getElementById('topbar').animate([
+      { transform:'translateY(-18px)', opacity:0 }, { transform:'translateY(0)', opacity:1 }
+    ], { duration:650, easing:ease, fill:'both' });
+    document.getElementById('badge').animate([
+      { opacity:0, transform:'translateX(-50%) scale(.82)' }, { opacity:1, transform:'translateX(-50%) scale(1)' }
+    ], { duration:600, delay:180, easing:'cubic-bezier(.16,1.3,.35,1)', fill:'both' });
+    [...document.querySelectorAll('.headline span')].forEach((line,i) => line.animate([
+      { opacity:0, filter:'blur(12px)', transform:'translateY(30px)' },
+      { opacity:1, filter:'blur(0)', transform:'translateY(0)' }
+    ], { duration:850, delay:300+i*130, easing:ease, fill:'both' }));
+    document.getElementById('subline').animate([
+      { opacity:0, transform:'translate(-50%,18px)' }, { opacity:1, transform:'translate(-50%,0)' }
+    ], { duration:700, delay:620, easing:ease, fill:'both' });
+    carousel.animate([{opacity:0, transform:'translateY(42px)'},{opacity:1,transform:'translateY(0)'}], {duration:850,delay:650,easing:ease,fill:'both'});
+    document.getElementById('ctaWrap').animate([{opacity:0,transform:'scale(.72)'},{opacity:1,transform:'scale(1)'}], {duration:650,delay:900,easing:'cubic-bezier(.16,1.35,.35,1)',fill:'both'});
+    document.querySelectorAll('.doodle .draw').forEach((path,i) => {
+      const len = path.getTotalLength();
+      path.style.setProperty('--length', `${len}`);
+      path.animate([{strokeDashoffset:len},{strokeDashoffset:0}], {duration:1000,delay:900+i*120,easing:'ease-in-out',fill:'both'});
+    });
+    ['beSeen','zeroCost'].forEach((id,i)=>document.getElementById(id).animate([
+      {opacity:0},{opacity:1}
+    ],{duration:650,delay:1100+i*180,fill:'both'}));
+  }
+
+  function pointerDown(event) {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    dragging = true; pointerId = event.pointerId;
+    carousel.classList.add('dragging');
+    carousel.setPointerCapture(pointerId);
+    dragStartX = event.clientX; dragStartOffset = offset;
+    previousX = event.clientX; previousTime = performance.now(); lastVelocity = 0; momentum = 0;
+  }
+  function pointerMove(event) {
+    if (!dragging || event.pointerId !== pointerId) return;
+    const now = performance.now();
+    const deltaUnits = (event.clientX-dragStartX)/readScale();
+    offset = dragStartOffset-deltaUnits;
+    const dt=Math.max(1,now-previousTime);
+    lastVelocity = ((event.clientX-previousX)/readScale())/(dt/1000);
+    previousX=event.clientX; previousTime=now;
+  }
+  function pointerUp(event) {
+    if (!dragging || (pointerId !== null && event.pointerId !== pointerId)) return;
+    dragging=false; pointerId=null; carousel.classList.remove('dragging');
+    momentum = -clamp(lastVelocity,-2200,2200);
+  }
+
+  carousel.addEventListener('pointerdown',pointerDown);
+  carousel.addEventListener('pointermove',pointerMove);
+  carousel.addEventListener('pointerup',pointerUp);
+  carousel.addEventListener('pointercancel',pointerUp);
+  carousel.addEventListener('lostpointercapture',pointerUp);
+  window.addEventListener('resize',()=>{u=readScale();});
+  reducedMotion.addEventListener?.('change',()=>location.reload());
+
+  // Long-running Web Animations clock, used as a stable time source.
+  if (!reducedMotion.matches && document.documentElement.animate) {
+    animationClock = document.documentElement.animate([{opacity:1},{opacity:1}], {duration:1e9, iterations:Infinity});
+    // Leave the one-billion-millisecond animation running as the monotonic carousel clock.
+  }
+  createVideoLayers();
+  animateIn();
+  rafId=requestAnimationFrame(render);
+})();
+</script>
+<script src="/app.js" defer></script>
+</body>
+</html>

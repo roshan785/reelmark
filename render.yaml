@@ -1,0 +1,42 @@
+# render.yaml — Render Blueprint for Reelmark.
+#
+# This file means the GitHub repo alone is enough to deploy: Render reads it,
+# provisions the service, and redeploys on every push to the default branch.
+#
+# NOTE ON PERSISTENCE
+#   The `disk:` block below is commented out because Render's FREE plan does not
+#   support persistent disks — including it would make Blueprint validation fail.
+#   On the free plan the container filesystem is ephemeral, so accounts/leads are
+#   lost whenever Render restarts or redeploys the service.
+#   To make data permanent (recommended), upgrade the service to Starter and
+#   uncomment the disk + DATA_DIR lines. Nothing else needs to change.
+services:
+  - type: web
+    name: reelmark
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm install --no-audit --no-fund
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.22.1
+      # Render routes traffic to the container, so the app must not bind loopback.
+      - key: HOST
+        value: 0.0.0.0
+      # Behind Render's proxy the real client IP only exists in X-Forwarded-For,
+      # which is what the rate limiter keys on.
+      - key: TRUST_PROXY
+        value: "1"
+      # Generated once by Render and injected from then on; never in the repo.
+      - key: ADMIN_TOKEN
+        generateValue: true
+    # --- enable for permanent data (requires a paid instance type) ---
+    # disk:
+    #   name: reelmark-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    #   envVar: DATA_DIR
